@@ -1,2 +1,2 @@
 # chorus
-Compare LLMs in the browser in their native UI.
+Compare LLMs in their native browser UI.
