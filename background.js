@@ -10,7 +10,13 @@ chrome.omnibox.onInputEntered.addListener((text, disposition) => {
   
   // Claude's URL with the query
   const claudeUrl = `https://claude.ai/new?q=${encodedQuery}`;
+
+  // ChatGPT's URL with the query
+  const chatgptUrl = `https://chatgpt.com/?q=${encodedQuery}`;
   
   // Open Claude in a new tab
   chrome.tabs.create({ url: claudeUrl });
+
+  // Open ChatGPT in a new tab
+  chrome.tabs.create({ url: chatgptUrl });
 }); 

@@ -12,7 +12,7 @@
     "service_worker": "background.js"
   },
   "omnibox": {
-    "keyword": "ai"
+    "keyword": "ch"
   },
   "permissions": [
     "tabs"
