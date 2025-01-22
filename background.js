@@ -11,7 +11,8 @@ chrome.omnibox.onInputEntered.addListener((text, disposition) => {
     {
       enabledLLMs: {
         claude: true,
-        chatgpt: true
+        chatgpt: true,
+        gemini: true
       }
     },
     async (items) => {
@@ -34,6 +35,26 @@ chrome.omnibox.onInputEntered.addListener((text, disposition) => {
         tabIds.push(tab.id);
       }
 
+      if (items.enabledLLMs.gemini) {
+        const geminiUrl = 'https://gemini.google.com/app';
+        const tab = await chrome.tabs.create({ url: geminiUrl });
+        tabIds.push(tab.id);
+
+        // Create a flag to track if we've sent the message
+        let messageSent = false;
+        
+        // Wait for the tab to load and then send the query
+        chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+          if (tabId === tab.id && changeInfo.status === 'complete' && !messageSent) {
+            messageSent = true;
+            chrome.tabs.sendMessage(tabId, {
+              type: 'PASTE_QUERY',
+              query: text
+            });
+          }
+        });
+      }
+
       console.log(tabIds);
       // Create a tab group if we opened any tabs
       if (tabIds.length > 0) {
@@ -42,7 +63,18 @@ chrome.omnibox.onInputEntered.addListener((text, disposition) => {
           title: groupTitle,
           color: 'blue'
         });
+        // Focus the first tab
+        await chrome.tabs.update(tabIds[0], { active: true });
       }
     }
   );
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type === 'getApiKey') {
+    chrome.storage.sync.get(['apiKey'], (result) => {
+      sendResponse({ apiKey: result.apiKey });
+    });
+    return true;
+  }
 }); 

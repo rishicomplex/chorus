@@ -20,5 +20,11 @@
     "storage",
     "tabGroups"
   ],
+  "content_scripts": [
+    {
+      "matches": ["https://gemini.google.com/*"],
+      "js": ["gemini-content.js"]
+    }
+  ],
   "options_page": "options.html"
 } 
