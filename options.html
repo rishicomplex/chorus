@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Multi-LLM Launcher Settings</title>
+  <style>
+    body {
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    .llm-option {
+      margin: 10px 0;
+    }
+    .save-status {
+      color: green;
+      display: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>LLM Settings</h1>
+  <p>Select which LLMs you want to use:</p>
+  
+  <div class="llm-option">
+    <label>
+      <input type="checkbox" id="claude" name="claude">
+      Claude
+    </label>
+  </div>
+  
+  <div class="llm-option">
+    <label>
+      <input type="checkbox" id="chatgpt" name="chatgpt">
+      ChatGPT
+    </label>
+  </div>
+
+  <div class="save-status" id="saveStatus">Settings saved!</div>
+
+  <script src="options.js"></script>
+</body>
+</html> 
