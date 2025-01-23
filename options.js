@@ -48,7 +48,7 @@ function saveOptions() {
 // stored in chrome.storage.
 function restoreOptions() {
   const defaultEnabledLLMs = Object.fromEntries(
-    Object.keys(MODELS).map(id => [id, true])
+    Object.keys(MODELS).map(id => [id, MODELS[id].defaultEnabled])
   );
 
   chrome.storage.sync.get(
@@ -56,7 +56,7 @@ function restoreOptions() {
     (items) => {
       Object.keys(MODELS).forEach(modelId => {
         const checkbox = document.getElementById(modelId);
-        if (checkbox) {  // Add null check
+        if (checkbox) {
           checkbox.checked = items.enabledLLMs[modelId];
         }
       });

@@ -8,13 +8,13 @@ chrome.omnibox.onInputEntered.addListener((text, disposition) => {
   // Create group title from query (first 15 chars + ellipsis if longer)
   const groupTitle = text.length > 15 ? `${text.substring(0, 15)}...` : text;
   
-  // Get enabled LLMs from storage
+  // Get enabled LLMs from storage with defaults from MODELS
+  const defaultEnabledLLMs = Object.fromEntries(
+    Object.keys(MODELS).map(id => [id, MODELS[id].defaultEnabled])
+  );
+
   chrome.storage.sync.get(
-    {
-      enabledLLMs: Object.fromEntries(
-        Object.keys(MODELS).map(id => [id, true])
-      )
-    },
+    { enabledLLMs: defaultEnabledLLMs },
     async (items) => {
       // Array to store created tab IDs
       const tabIds = [];
