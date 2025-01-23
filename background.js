@@ -1,3 +1,5 @@
+import MODELS from './models.js';
+
 // Handle when user selects an option
 chrome.omnibox.onInputEntered.addListener((text, disposition) => {
   // Encode the query for URL safety
@@ -9,53 +11,41 @@ chrome.omnibox.onInputEntered.addListener((text, disposition) => {
   // Get enabled LLMs from storage
   chrome.storage.sync.get(
     {
-      enabledLLMs: {
-        claude: true,
-        chatgpt: true,
-        gemini: true
-      }
+      enabledLLMs: Object.fromEntries(
+        Object.keys(MODELS).map(id => [id, true])
+      )
     },
     async (items) => {
       // Array to store created tab IDs
       const tabIds = [];
       
-      if (items.enabledLLMs.claude) {
-        // Claude's URL with the query
-        const claudeUrl = `https://claude.ai/new?q=${encodedQuery}`;
-        // Open Claude in a new tab
-        const tab = await chrome.tabs.create({ url: claudeUrl });
-        tabIds.push(tab.id);
-      }
-      
-      if (items.enabledLLMs.chatgpt) {
-        // ChatGPT's URL with the query
-        const chatgptUrl = `https://chatgpt.com/?q=${encodedQuery}`;
-        // Open ChatGPT in a new tab
-        const tab = await chrome.tabs.create({ url: chatgptUrl });
-        tabIds.push(tab.id);
-      }
-
-      if (items.enabledLLMs.gemini) {
-        const geminiUrl = 'https://gemini.google.com/app';
-        const tab = await chrome.tabs.create({ url: geminiUrl });
-        tabIds.push(tab.id);
-
-        // Create a flag to track if we've sent the message
-        let messageSent = false;
+      for (const [modelId, isEnabled] of Object.entries(items.enabledLLMs)) {
+        if (!isEnabled) continue;
         
-        // Wait for the tab to load and then send the query
-        chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
-          if (tabId === tab.id && changeInfo.status === 'complete' && !messageSent) {
-            messageSent = true;
-            chrome.tabs.sendMessage(tabId, {
-              type: 'PASTE_QUERY',
-              query: text
-            });
-          }
-        });
+        const model = MODELS[modelId];
+        let url = model.baseUrl;
+        
+        if (model.queryHandler.type === 'url') {
+          url += `?${model.queryHandler.queryParam}=${encodedQuery}`;
+        }
+        
+        const tab = await chrome.tabs.create({ url });
+        tabIds.push(tab.id);
+        
+        if (model.queryHandler.type === 'content_script') {
+          let messageSent = false;
+          chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+            if (tabId === tab.id && changeInfo.status === 'complete' && !messageSent) {
+              messageSent = true;
+              chrome.tabs.sendMessage(tabId, {
+                type: model.queryHandler.messageType,
+                query: text
+              });
+            }
+          });
+        }
       }
 
-      console.log(tabIds);
       // Create a tab group if we opened any tabs
       if (tabIds.length > 0) {
         const group = await chrome.tabs.group({ tabIds });
@@ -68,13 +58,4 @@ chrome.omnibox.onInputEntered.addListener((text, disposition) => {
       }
     }
   );
-});
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === 'getApiKey') {
-    chrome.storage.sync.get(['apiKey'], (result) => {
-      sendResponse({ apiKey: result.apiKey });
-    });
-    return true;
-  }
 }); 

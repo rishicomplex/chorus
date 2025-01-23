@@ -1,17 +1,15 @@
+import MODELS from './models.js';
+
 // Saves options to chrome.storage
 function saveOptions() {
-  const claude = document.getElementById('claude').checked;
-  const chatgpt = document.getElementById('chatgpt').checked;
-  const gemini = document.getElementById('gemini').checked;
+  const enabledLLMs = {};
+  
+  Object.keys(MODELS).forEach(modelId => {
+    enabledLLMs[modelId] = document.getElementById(modelId).checked;
+  });
   
   chrome.storage.sync.set(
-    {
-      enabledLLMs: {
-        claude: claude,
-        chatgpt: chatgpt,
-        gemini: gemini
-      }
-    },
+    { enabledLLMs },
     () => {
       // Show save status
       const saveStatus = document.getElementById('saveStatus');
@@ -26,40 +24,41 @@ function saveOptions() {
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
 function restoreOptions() {
+  const defaultEnabledLLMs = Object.fromEntries(
+    Object.keys(MODELS).map(id => [id, true])
+  );
+
   chrome.storage.sync.get(
-    {
-      enabledLLMs: {
-        claude: true,
-        chatgpt: true,
-        gemini: true
-      }
-    },
+    { enabledLLMs: defaultEnabledLLMs },
     (items) => {
-      document.getElementById('claude').checked = items.enabledLLMs.claude;
-      document.getElementById('chatgpt').checked = items.enabledLLMs.chatgpt;
-      document.getElementById('gemini').checked = items.enabledLLMs.gemini;
+      Object.keys(MODELS).forEach(modelId => {
+        document.getElementById(modelId).checked = items.enabledLLMs[modelId];
+      });
     }
   );
 }
 
-// Add event listeners
+// Generate model checkboxes dynamically
+function createModelOptions() {
+  const container = document.getElementById('model-options');
+  
+  Object.values(MODELS).forEach(model => {
+    const div = document.createElement('div');
+    div.className = 'llm-option';
+    
+    div.innerHTML = `
+      <label>
+        <input type="checkbox" id="${model.id}" name="${model.id}">
+        ${model.name}
+      </label>
+    `;
+    
+    container.appendChild(div);
+    document.getElementById(model.id).addEventListener('change', saveOptions);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  chrome.storage.sync.get(['apiKey'], (result) => {
-    document.getElementById('apiKey').value = result.apiKey || '';
-  });
-
-  document.getElementById('save').addEventListener('click', () => {
-    const apiKey = document.getElementById('apiKey').value;
-    chrome.storage.sync.set({ apiKey }, () => {
-      document.getElementById('status').textContent = 'Settings saved';
-      setTimeout(() => {
-        document.getElementById('status').textContent = '';
-      }, 2000);
-    });
-  });
-});
-
-document.addEventListener('DOMContentLoaded', restoreOptions);
-document.getElementById('claude').addEventListener('change', saveOptions);
-document.getElementById('chatgpt').addEventListener('change', saveOptions);
-document.getElementById('gemini').addEventListener('change', saveOptions); 
+  createModelOptions();
+  restoreOptions();
+}); 

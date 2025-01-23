@@ -21,29 +21,10 @@
   <h1>LLM Settings</h1>
   <p>Select which LLMs you want to use:</p>
   
-  <div class="llm-option">
-    <label>
-      <input type="checkbox" id="claude" name="claude">
-      Claude
-    </label>
-  </div>
-  
-  <div class="llm-option">
-    <label>
-      <input type="checkbox" id="chatgpt" name="chatgpt">
-      ChatGPT
-    </label>
-  </div>
-
-  <div class="llm-option">
-    <label>
-      <input type="checkbox" id="gemini" name="gemini">
-      Gemini
-    </label>
-  </div>
+  <div id="model-options"></div>
 
   <div class="save-status" id="saveStatus">Settings saved!</div>
 
-  <script src="options.js"></script>
+  <script type="module" src="options.js"></script>
 </body>
 </html> 
