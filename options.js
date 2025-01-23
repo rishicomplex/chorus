@@ -1,11 +1,34 @@
 import MODELS from './models.js';
 
+// Generate model checkboxes dynamically
+function createModelOptions() {
+  const container = document.getElementById('model-options');
+  
+  Object.values(MODELS).forEach(model => {
+    const div = document.createElement('div');
+    div.className = 'llm-option';
+    
+    div.innerHTML = `
+      <label>
+        <input type="checkbox" id="${model.id}" name="${model.id}">
+        ${model.name}
+      </label>
+    `;
+    
+    container.appendChild(div);
+  });
+}
+
 // Saves options to chrome.storage
 function saveOptions() {
+  console.log('saveOptions called');
   const enabledLLMs = {};
   
   Object.keys(MODELS).forEach(modelId => {
-    enabledLLMs[modelId] = document.getElementById(modelId).checked;
+    const checkbox = document.getElementById(modelId);
+    if (checkbox) {  // Add null check
+      enabledLLMs[modelId] = checkbox.checked;
+    }
   });
   
   chrome.storage.sync.set(
@@ -32,33 +55,28 @@ function restoreOptions() {
     { enabledLLMs: defaultEnabledLLMs },
     (items) => {
       Object.keys(MODELS).forEach(modelId => {
-        document.getElementById(modelId).checked = items.enabledLLMs[modelId];
+        const checkbox = document.getElementById(modelId);
+        if (checkbox) {  // Add null check
+          checkbox.checked = items.enabledLLMs[modelId];
+        }
       });
     }
   );
 }
 
-// Generate model checkboxes dynamically
-function createModelOptions() {
-  const container = document.getElementById('model-options');
-  
-  Object.values(MODELS).forEach(model => {
-    const div = document.createElement('div');
-    div.className = 'llm-option';
-    
-    div.innerHTML = `
-      <label>
-        <input type="checkbox" id="${model.id}" name="${model.id}">
-        ${model.name}
-      </label>
-    `;
-    
-    container.appendChild(div);
-    document.getElementById(model.id).addEventListener('change', saveOptions);
-  });
-}
-
+// Initialize everything once DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
+  // First create the checkboxes
   createModelOptions();
+  
+  // Then restore their states
   restoreOptions();
+  
+  // Finally add change listeners to each checkbox
+  Object.keys(MODELS).forEach(modelId => {
+    const checkbox = document.getElementById(modelId);
+    if (checkbox) {  // Add null check
+      checkbox.addEventListener('change', saveOptions);
+    }
+  });
 }); 

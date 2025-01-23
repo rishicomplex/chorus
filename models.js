@@ -17,13 +17,24 @@ const MODELS = {
       queryParam: 'q'
     }
   },
-  gemini: {
-    id: 'gemini',
-    name: 'Gemini',
+  'gemini-flash-15': {
+    id: 'gemini-flash-15',
+    name: 'Gemini 1.5 Flash',
     baseUrl: 'https://gemini.google.com/app',
     queryHandler: {
       type: 'content_script',
-      messageType: 'PASTE_QUERY'
+      messageType: 'PASTE_QUERY',
+      modelName: '1.5 Flash'
+    }
+  },
+  'gemini-flash-20': {
+    id: 'gemini-flash-20',
+    name: 'Gemini 2.0 Flash',
+    baseUrl: 'https://gemini.google.com/app',
+    queryHandler: {
+      type: 'content_script',
+      messageType: 'PASTE_QUERY',
+      modelName: '2.0 Flash Experimental'
     }
   }
 };

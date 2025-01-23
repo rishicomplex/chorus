@@ -39,7 +39,8 @@ chrome.omnibox.onInputEntered.addListener((text, disposition) => {
               messageSent = true;
               chrome.tabs.sendMessage(tabId, {
                 type: model.queryHandler.messageType,
-                query: text
+                query: text,
+                modelName: model.queryHandler.modelName
               });
             }
           });
