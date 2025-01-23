@@ -9,3 +9,21 @@ This can be useful if you're looking to ensemble the responses of various LLMs, 
 
 ## Demo
 ![demo](assets/output.gif)
+
+## Installation
+
+### Chrome web store
+TODO: Add Chrome extension link.
+
+### Local installation
+
+1. Clone the repository.
+2. Follow the instructions [here](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked) to load a local Chrome extension.
+
+## Usage
+
+To invoke Chorus, type <kbd>ch</kbd> <kbd>Space</kbd> followed by your query in the omnibox and press enter. A new tab group will be created with your message sent to each chatbot you've enabled.
+
+## Options
+
+Click on the extension icon to access the options page. Here, you can select which models you want to use.
