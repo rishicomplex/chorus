@@ -1,7 +1,7 @@
 const MODELS = {
-  claude: {
-    id: 'claude',
-    name: 'Claude',
+  'claude-35-sonnet': {
+    id: 'claude-35-sonnet',
+    name: 'Claude 3.5 Sonnet',
     baseUrl: 'https://claude.ai/new',
     queryHandler: {
       type: 'url',
