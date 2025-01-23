@@ -9,14 +9,26 @@ const MODELS = {
       queryParam: 'q'
     }
   },
-  chatgpt: {
-    id: 'chatgpt',
-    name: 'ChatGPT',
+  'gpt-4o': {
+    id: 'gpt-4o',
+    name: 'ChatGPT 4o',
     baseUrl: 'https://chatgpt.com',
     defaultEnabled: true,
     queryHandler: {
       type: 'url',
-      queryParam: 'q'
+      queryParam: 'q',
+      modelName: 'gpt-4o'
+    }
+  },
+  'o1': {
+    id: 'o1',
+    name: 'ChatGPT o1',
+    baseUrl: 'https://chatgpt.com',
+    defaultEnabled: false,
+    queryHandler: {
+      type: 'url',
+      queryParam: 'q',
+      modelName: 'o1'
     }
   },
   'gemini-flash-15': {

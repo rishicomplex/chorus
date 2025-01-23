@@ -27,6 +27,9 @@ chrome.omnibox.onInputEntered.addListener((text, disposition) => {
         
         if (model.queryHandler.type === 'url') {
           url += `?${model.queryHandler.queryParam}=${encodedQuery}`;
+          if (model.queryHandler.modelName) {
+            url += `&model=${model.queryHandler.modelName}`;
+          }
         }
         
         const tab = await chrome.tabs.create({ url });
