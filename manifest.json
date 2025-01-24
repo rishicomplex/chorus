@@ -17,7 +17,6 @@
     "keyword": "ch"
   },
   "permissions": [
-    "tabs",
     "storage",
     "tabGroups"
   ],
