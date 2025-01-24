@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Chorus",
+  "name": "Chorus: Compare LLMs in the browser",
   "version": "0.0.2",
   "description": "Compare LLMs in their native browser UI.",
   "icons": {
