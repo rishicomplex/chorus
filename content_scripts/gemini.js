@@ -17,16 +17,7 @@
               dispatchInputEvents(textarea);
 
               // Simulate Enter key press
-              const enterEvent = new KeyboardEvent('keydown', {
-                  key: 'Enter',
-                  code: 'Enter',
-                  keyCode: 13,
-                  which: 13,
-                  bubbles: true,
-                  cancelable: true,
-                  composed: true
-              });
-              textarea.dispatchEvent(enterEvent);
+              pressEnter(textarea);
           };
 
           selectModel(modelName).then(() => fillInput());

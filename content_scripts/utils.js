@@ -44,3 +44,17 @@ export function dispatchInputEvents(element) {
   element.dispatchEvent(new Event('input', { bubbles: true }));
   element.dispatchEvent(new Event('change', { bubbles: true }));
 } 
+
+// Helper function to dispatch Enter key press
+export function pressEnter(element) {
+  const enterEvent = new KeyboardEvent('keydown', {
+    key: 'Enter',
+    code: 'Enter',
+    keyCode: 13,
+    which: 13,
+    bubbles: true,
+    cancelable: true,
+    composed: true
+  });
+  element.dispatchEvent(enterEvent);
+}
