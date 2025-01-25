@@ -97,6 +97,17 @@ const MODELS = {
       modelName: 'V3'
     }
   },
+  'deepseek-r1': {
+    id: 'deepseek-r1',
+    name: 'DeepSeek R1',
+    baseUrl: 'https://chat.deepseek.com/',
+    defaultEnabled: false,
+    queryHandler: {
+      type: 'content_script',
+      messageType: 'PASTE_QUERY',
+      modelName: 'R1'
+    }
+  }
 };
 
 export default MODELS; 

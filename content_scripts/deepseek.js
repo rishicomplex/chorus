@@ -5,6 +5,7 @@
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.type === 'PASTE_QUERY') {
         const query = message.query;
+        const modelName = message.modelName;
     
         // Function to find and fill the input
         const fillInput = async () => {
@@ -17,9 +18,20 @@
 
           pressEnter(textarea);
         };
-    
-        fillInput();
+
+        // Execute async operations in sequence
+        (async () => {
+          if (modelName === 'R1') {
+            await clickR1Button();
+          }
+          await fillInput();
+        })();
       }
   });
+
+  async function clickR1Button() {
+    const r1Span = await waitForElement('span', 'DeepThink (R1)');
+    r1Span.closest('[role="button"]').click();
+  }
 })();
   
