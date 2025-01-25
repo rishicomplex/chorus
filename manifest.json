@@ -23,8 +23,21 @@
   "content_scripts": [
     {
       "matches": ["https://gemini.google.com/*"],
-      "js": ["gemini-content.js"]
+      "js": ["content_scripts/gemini.js"],
+      "type": "module"
+    },
+    {
+      "matches": ["https://chat.deepseek.com/*"],
+      "js": ["content_scripts/deepseek.js"],
+      "type": "module"
     }
   ],
+  "web_accessible_resources": [{
+    "resources": ["content_scripts/utils.js"],
+    "matches": [
+      "https://gemini.google.com/*",
+      "https://chat.deepseek.com/*"
+    ]
+  }],
   "options_page": "options.html"
 } 

@@ -85,7 +85,18 @@ const MODELS = {
       messageType: 'PASTE_QUERY',
       modelName: '2.0 Flash Experimental'
     }
-  }
+  },
+  'deepseek-v3': {
+    id: 'deepseek-v3',
+    name: 'DeepSeek V3',
+    baseUrl: 'https://chat.deepseek.com/',
+    defaultEnabled: false,
+    queryHandler: {
+      type: 'content_script',
+      messageType: 'PASTE_QUERY',
+      modelName: 'V3'
+    }
+  },
 };
 
 export default MODELS; 
