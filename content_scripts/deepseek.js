@@ -1,5 +1,5 @@
 (async () => {
-  const { waitForElement, dispatchInputEvents } = await import(chrome.runtime.getURL('content_scripts/utils.js'));
+  const { waitForElement, dispatchInputEvents, pressEnter } = await import(chrome.runtime.getURL('content_scripts/utils.js'));
 
   // Listen for messages from the background script
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
