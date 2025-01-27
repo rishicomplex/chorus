@@ -107,7 +107,27 @@ const MODELS = {
       messageType: 'PASTE_QUERY',
       modelName: 'R1'
     }
-  }
+  },
+  'google-search': {
+    id: 'google-search',
+    name: 'Google Search',
+    baseUrl: 'https://www.google.com/search',
+    defaultEnabled: false,
+    queryHandler: {
+      type: 'url',
+      queryParam: 'q'
+    }
+  },
+  'perplexity': {
+    id: 'perplexity',
+    name: 'Perplexity',
+    baseUrl: 'https://www.perplexity.ai/search',
+    defaultEnabled: false,
+    queryHandler: {
+      type: 'url',
+      queryParam: 'q'
+    }
+  },
 };
 
 export default MODELS; 

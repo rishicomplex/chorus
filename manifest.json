@@ -30,13 +30,19 @@
       "matches": ["https://chat.deepseek.com/*"],
       "js": ["content_scripts/deepseek.js"],
       "type": "module"
+    },
+    {
+      "matches": ["https://www.perplexity.ai/*"],
+      "js": ["content_scripts/perplexity.js"],
+      "type": "module"
     }
   ],
   "web_accessible_resources": [{
     "resources": ["content_scripts/utils.js"],
     "matches": [
       "https://gemini.google.com/*",
-      "https://chat.deepseek.com/*"
+      "https://chat.deepseek.com/*",
+      "https://www.perplexity.ai/*"
     ]
   }],
   "options_page": "options.html"
