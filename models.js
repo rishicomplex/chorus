@@ -20,39 +20,6 @@ const MODELS = {
       modelName: 'gpt-4o'
     }
   },
-  'gpt-4o-mini': {
-    id: 'gpt-4o-mini',
-    name: 'ChatGPT 4o Mini',
-    baseUrl: 'https://chatgpt.com',
-    defaultEnabled: false,
-    queryHandler: {
-      type: 'url',
-      queryParam: 'q',
-      modelName: 'gpt-4o-mini'
-    }
-  },
-  'o1': {
-    id: 'o1',
-    name: 'ChatGPT o1',
-    baseUrl: 'https://chatgpt.com',
-    defaultEnabled: false,
-    queryHandler: {
-      type: 'url',
-      queryParam: 'q',
-      modelName: 'o1'
-    }
-  },
-  'o1-mini': {
-    id: 'o1-mini',
-    name: 'ChatGPT o1 Mini',
-    baseUrl: 'https://chatgpt.com',
-    defaultEnabled: false,
-    queryHandler: {
-      type: 'url',
-      queryParam: 'q',
-      modelName: 'o1-mini'
-    }
-  },
   'gemini-pro-15': {
     id: 'gemini-pro-15',
     name: 'Gemini 1.5 Pro',

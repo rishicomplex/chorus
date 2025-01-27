@@ -31,7 +31,6 @@ To invoke Chorus, type <kbd>ch</kbd> <kbd>Space</kbd> followed by your query in 
 Click on the extension icon to access the options page. Here, you can select which models you want to use.
 
 ## TODOs
-- [ ] Move ChatGPT to a content script  
+- [ ] Support o1 and other OAI models
 - [ ] Support other versions of Claude
-- [ ] Add support for Perplexity
 - [ ] Add a feature that lets you clone an existing session on one app to other apps by replaying the conversation
