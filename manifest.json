@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Chorus: Compare LLMs in the browser",
-  "version": "0.0.2",
+  "name": "Chorus: Compare LLMs",
+  "version": "0.0.3",
   "description": "Compare LLMs in their native browser UI.",
   "icons": {
     "16": "icons/icon16.png",
@@ -30,19 +30,13 @@
       "matches": ["https://chat.deepseek.com/*"],
       "js": ["content_scripts/deepseek.js"],
       "type": "module"
-    },
-    {
-      "matches": ["https://www.perplexity.ai/*"],
-      "js": ["content_scripts/perplexity.js"],
-      "type": "module"
     }
   ],
   "web_accessible_resources": [{
     "resources": ["content_scripts/utils.js"],
     "matches": [
       "https://gemini.google.com/*",
-      "https://chat.deepseek.com/*",
-      "https://www.perplexity.ai/*"
+      "https://chat.deepseek.com/*"
     ]
   }],
   "options_page": "options.html"
