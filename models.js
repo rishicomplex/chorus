@@ -17,7 +17,6 @@ const MODELS = {
     queryHandler: {
       type: 'url',
       queryParam: 'q',
-      modelName: 'gpt-4o'
     }
   },
   'gemini-pro-15': {
