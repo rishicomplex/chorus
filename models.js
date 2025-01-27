@@ -9,9 +9,9 @@ const MODELS = {
       queryParam: 'q'
     }
   },
-  'gpt-4o': {
-    id: 'gpt-4o',
-    name: 'ChatGPT 4o',
+  'chatgpt': {
+    id: 'chatgpt',
+    name: 'ChatGPT',
     baseUrl: 'https://chatgpt.com',
     defaultEnabled: true,
     queryHandler: {
