@@ -21,7 +21,7 @@
 
         // Execute async operations in sequence
         (async () => {
-          if (modelName === 'R1') {
+          if (modelName === 'V3') {
             await clickR1Button();
           }
           await fillInput();
