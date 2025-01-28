@@ -15,7 +15,7 @@ Currently supports Claude, ChatGPT, Gemini and DeepSeek. You will need to be log
 ## Installation
 
 ### Chrome web store
-Install the extension from the Chrome web store [here](https://chromewebstore.google.com/detail/chorus-compare-llms-in-th/opedkjbjehljdkjahbingfncglipdeif).
+Install the extension from the Chrome web store [here](https://chromewebstore.google.com/detail/chorus-compare-llms/opedkjbjehljdkjahbingfncglipdeif).
 
 ### Local installation
 
