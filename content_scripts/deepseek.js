@@ -32,6 +32,7 @@
   async function clickR1Button() {
     const r1Span = await waitForElement('span', 'DeepThink (R1)');
     r1Span.closest('[role="button"]').click();
+    console.log('R1 button clicked');
   }
 })();
   

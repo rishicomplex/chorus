@@ -5,8 +5,8 @@ const MODELS = {
     baseUrl: 'https://claude.ai/new',
     defaultEnabled: true,
     queryHandler: {
-      type: 'url',
-      queryParam: 'q'
+      type: 'content_script',
+      messageType: 'PASTE_QUERY'
     }
   },
   'oai-chatgpt': {
@@ -56,7 +56,7 @@ const MODELS = {
     id: 'deepseek-v3',
     name: 'DeepSeek V3',
     baseUrl: 'https://chat.deepseek.com/',
-    defaultEnabled: false,
+    defaultEnabled: true,
     queryHandler: {
       type: 'content_script',
       messageType: 'PASTE_QUERY',

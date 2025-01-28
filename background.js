@@ -1,10 +1,25 @@
 import MODELS from './models.js';
 
+// Helper function to send message with retries
+async function sendMessageWithRetry(tabId, message, maxAttempts = 5, delay = 1000) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      await new Promise(resolve => setTimeout(resolve, delay));
+      await chrome.tabs.sendMessage(tabId, message);
+      return; // Success
+    } catch (error) {
+      if (attempt === maxAttempts) {
+        throw error; // Rethrow if we're out of attempts
+      }
+      // Otherwise continue to next attempt
+    }
+  }
+}
+
 // Handle when user selects an option
 chrome.omnibox.onInputEntered.addListener((text, disposition) => {
   // Encode the query for URL safety
-  const encodedQuery = encodeURIComponent(text);
-  
+  const query = encodeURIComponent(text);
   // Create group title from query (first 15 chars + ellipsis if longer)
   const groupTitle = text.length > 15 ? `${text.substring(0, 15)}...` : text;
   
@@ -13,53 +28,54 @@ chrome.omnibox.onInputEntered.addListener((text, disposition) => {
     Object.keys(MODELS).map(id => [id, MODELS[id].defaultEnabled])
   );
 
-  chrome.storage.sync.get(
-    { enabledLLMs: defaultEnabledLLMs },
-    async (items) => {
-      // Array to store created tab IDs
-      const tabIds = [];
-      
-      for (const [modelId, isEnabled] of Object.entries(items.enabledLLMs)) {
-        if (!isEnabled) continue;
-        
-        const model = MODELS[modelId];
-        let url = model.baseUrl;
-        
-        if (model.queryHandler.type === 'url') {
-          url += `?${model.queryHandler.queryParam}=${encodedQuery}`;
-          if (model.queryHandler.modelName) {
-            url += `&model=${model.queryHandler.modelName}`;
-          }
-        }
-        
-        const tab = await chrome.tabs.create({ url });
-        tabIds.push(tab.id);
-        
-        if (model.queryHandler.type === 'content_script') {
-          let messageSent = false;
-          chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
-            if (tabId === tab.id && changeInfo.status === 'complete' && !messageSent) {
-              messageSent = true;
-              chrome.tabs.sendMessage(tabId, {
+  // Get enabled models from storage
+  chrome.storage.sync.get({ enabledLLMs: defaultEnabledLLMs }, async (result) => {
+    try {
+      // Create all tabs first
+      const tabs = await Promise.all(
+        Object.entries(result.enabledLLMs)
+          .filter(([_, isEnabled]) => isEnabled)
+          .map(async ([modelId, _]) => {
+            const model = MODELS[modelId];
+            let url = model.baseUrl;
+
+            if (model.queryHandler.type === 'url') {
+              url += `?${model.queryHandler.queryParam}=${query}`;
+              if (model.queryHandler.modelName) {
+                url += `&model=${model.queryHandler.modelName}`;
+              }
+            }
+
+            const tab = await chrome.tabs.create({ url });
+            return { tab, modelId };
+          })
+      );
+
+      if (tabs.length > 0) {
+        // Group the tabs
+        const tabIds = tabs.map(t => t.tab.id);
+        const groupId = await chrome.tabs.group({ tabIds });
+        await chrome.tabGroups.update(groupId, { title: groupTitle, color: 'blue' });
+        await chrome.tabs.update(tabIds[0], { active: true });
+
+        // Send messages to content scripts after tabs are created and grouped
+        for (const { tab, modelId } of tabs) {
+          const model = MODELS[modelId];
+          if (model.queryHandler.type === 'content_script') {
+            try {
+              await sendMessageWithRetry(tab.id, {
                 type: model.queryHandler.messageType,
                 query: text,
                 modelName: model.queryHandler.modelName
               });
+            } catch (error) {
+              console.error(`Error sending message to ${modelId} after retries:`, error);
             }
-          });
+          }
         }
       }
-
-      // Create a tab group if we opened any tabs
-      if (tabIds.length > 0) {
-        const group = await chrome.tabs.group({ tabIds });
-        await chrome.tabGroups.update(group, { 
-          title: groupTitle,
-          color: 'blue'
-        });
-        // Focus the first tab
-        await chrome.tabs.update(tabIds[0], { active: true });
-      }
+    } catch (error) {
+      console.error('Error creating tabs:', error);
     }
-  );
+  });
 }); 
