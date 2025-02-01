@@ -49,7 +49,7 @@ const MODELS = {
     queryHandler: {
       type: 'content_script',
       messageType: 'PASTE_QUERY',
-      modelName: '2.0 Flash Experimental'
+      modelName: '2.0 Flash'
     }
   },
   'deepseek-v3': {
